@@ -119,7 +119,7 @@ export function narrate({ file, category }, src) {
     if (pkgs.length) out.push(`Uses ${list(pkgs, 4)}${local.length ? ` plus ${local.length} local import${local.length > 1 ? 's' : ''}` : ''}.`);
     else if (local.length) out.push(`Pulls in ${list(local, 3)}.`);
   }
-  return out.join(' ').replace(/\.\./g, '.');
+  return out.join(' ').replace(/\.\.(?=\s|$)/g, '.');
 }
 
 // Optional: polish captions with a local Ollama model. Falls back to the input.
