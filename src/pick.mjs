@@ -46,7 +46,7 @@ function importCounts(root, codeFiles) {
     const src = read(root, f);
     for (const m of src.matchAll(re)) {
       let spec = m[1];
-      if (!spec && m[2]) spec = m[2].replace(/^\.+/, (d) => (d.length === 1 ? './' : '../'.repeat(d.length - 1))).replace(/\./g, '/');
+      if (!spec && m[2]) spec = m[2].replace(/^(\.+)(.*)$/, (_, d, rest) => (d.length === 1 ? './' : '../'.repeat(d.length - 1)) + rest.replace(/\./g, '/'));
       if (!spec) continue;
       const base = path.posix.normalize(path.posix.join(path.posix.dirname(f), spec));
       const ext = path.posix.extname(f);
