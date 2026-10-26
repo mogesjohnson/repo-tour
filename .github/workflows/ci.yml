@@ -14,6 +14,7 @@ jobs:
         with:
           node-version: 20
       - run: npm run check
+      - run: npm test
       - name: Tour this repo and check the output
         run: |
           npm run smoke
