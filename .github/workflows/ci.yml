@@ -1,0 +1,22 @@
+name: ci
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm run check
+      - name: Tour this repo and check the output
+        run: |
+          npm run smoke
+          test -s /tmp/repo-tour-smoke/index.html
+          test -s /tmp/repo-tour-smoke/tour.md
+          ! grep -q 'src="http' /tmp/repo-tour-smoke/index.html

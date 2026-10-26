@@ -1,0 +1,13 @@
+{
+  "name": "repo-tour",
+  "version": "0.1.0",
+  "description": "Point it at a repo, get a guided tour of its main files as HTML, Markdown or video",
+  "type": "module",
+  "bin": { "repo-tour": "bin/repo-tour.mjs" },
+  "scripts": {
+    "check": "node --check bin/repo-tour.mjs && for f in src/*.mjs; do node --check $f || exit 1; done",
+    "smoke": "node bin/repo-tour.mjs . --out /tmp/repo-tour-smoke"
+  },
+  "engines": { "node": ">=18" },
+  "license": "MIT"
+}
