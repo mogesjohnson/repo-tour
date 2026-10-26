@@ -80,7 +80,7 @@ function jsonFacts(file, src) {
 
 function workflowFacts(src) {
   const name = (src.match(/^name:\s*(.+)$/m) || [])[1];
-  const on = src.match(/^on:\s*([\s\S]*?)^\S/m);
+  const on = src.match(/^on:[ \t]*\n([\s\S]*?)^\S/m);
   const triggers = on ? [...on[1].matchAll(/^\s{2}(\w+):?/gm)].map((m) => m[1]) : [];
   const inline = (src.match(/^on:\s*\[?([\w, ]+)\]?\s*$/m) || [])[1];
   const jobs = src.match(/^jobs:\s*\n([\s\S]*)/m);
