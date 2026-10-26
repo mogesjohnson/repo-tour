@@ -26,8 +26,10 @@ const sentence = (s, max = 220) => {
 function markdown(src) {
   const imports = [...src.matchAll(/^@(\S+)\s*$/gm)].map((m) => m[1]);
   const lines = src.replace(/<!--[\s\S]*?-->/g, '').split('\n').filter((l) => !/^@\S+\s*$/.test(l));
-  const title = (lines.find((l) => /^#\s/.test(l)) || '').replace(/^#\s+/, '');
-  const heads = lines.filter((l) => /^##\s/.test(l)).map((l) => l.replace(/^##\s+/, '').trim());
+  let fenced = false;
+  const prose = lines.filter((l) => { if (/^\s*(```|~~~)/.test(l)) { fenced = !fenced; return false; } return !fenced; });
+  const title = (prose.find((l) => /^#\s/.test(l)) || '').replace(/^#\s+/, '');
+  const heads = prose.filter((l) => /^##\s/.test(l)).map((l) => l.replace(/^##\s+/, '').trim());
   let para = '';
   let inFence = false;
   for (const l of lines) {
