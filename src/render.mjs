@@ -6,7 +6,7 @@ const FENCE = { JavaScript: 'js', TypeScript: 'ts', Python: 'python', Go: 'go', 
 const LABEL = { overview: 'Overview', agent: 'Agent file', config: 'Config', entry: 'Entry point', module: 'Key module', ci: 'CI', docs: 'Docs' };
 
 export function renderMarkdown(tour, { snippetLines = 12 } = {}) {
-  const out = [`# Tour of ${tour.name}`, '', `${tour.steps.length} stops, picked from ${tour.total} files by [repo-tour](https://github.com/mogesjohnson/repo-tour).`, ''];
+  const out = [`# Tour of ${tour.name}`, '', `${tour.steps.length} stop${tour.steps.length === 1 ? '' : 's'}, picked from ${tour.total} files by [repo-tour](https://github.com/mogesjohnson/repo-tour).`, ''];
   tour.steps.forEach((s, i) => {
     out.push(`## ${i + 1}. \`${s.file}\` (${LABEL[s.category] || s.category})`, '', s.caption, '');
     const lines = s.code.split('\n');
