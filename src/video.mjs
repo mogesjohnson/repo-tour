@@ -3,7 +3,7 @@
 // Same approach as mogesjohnson/demo-reel. Never downloads anything.
 import { spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
-import { pathToFileURL } from 'node:url';
+import { pathToFileURL, fileURLToPath } from 'node:url';
 import { mkdtempSync, renameSync, rmSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -14,7 +14,7 @@ export const hasFfmpeg = () => spawnSync('ffmpeg', ['-version'], { stdio: 'ignor
 
 // Find playwright (or playwright-core) next to the tool, the target or the cwd.
 export async function loadPlaywright() {
-  const bases = [process.cwd(), path.dirname(new URL(import.meta.url).pathname)];
+  const bases = [process.cwd(), path.dirname(fileURLToPath(import.meta.url))];
   for (const base of bases) {
     const req = createRequire(path.join(base, 'noop.js'));
     for (const name of ['playwright', 'playwright-core']) {
