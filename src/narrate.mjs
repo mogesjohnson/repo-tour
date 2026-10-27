@@ -48,10 +48,11 @@ function leadingDoc(src) {
   return sentence(raw.replace(/^\s*(\*|\/\/|#)\s?/gm, ' ').replace(/@\w+.*$/gm, ''));
 }
 
-function codeFacts(src) {
+function codeFacts(src, lang) {
   const imports = [];
   for (const m of src.matchAll(/(?:from\s+|require\(\s*|import\s+)['"]([^'"]+)['"]/g)) imports.push(m[1]);
-  for (const m of src.matchAll(/^\s*(?:from\s+([\w.]+)\s+import|import\s+([\w.]+))/gm)) imports.push(m[1] || m[2]);
+  // Bare `import x` / `from x import` is Python; in JS `import React from 'react'` would add `React`.
+  if (lang === 'Python') for (const m of src.matchAll(/^\s*(?:from\s+([\w.]+)\s+import|import\s+([\w.]+))/gm)) imports.push(m[1] || m[2]);
   const exports = [];
   for (const m of src.matchAll(/export\s+(?:default\s+)?(?:async\s+)?(?:function\*?|class|const|let|interface|type|enum)\s+([A-Za-z_$][\w$]*)/g)) exports.push(m[1]);
   for (const m of src.matchAll(/^(?:async\s+)?(?:def|class)\s+([A-Za-z]\w*)/gm)) exports.push(m[1]);
@@ -114,7 +115,7 @@ export function narrate({ file, category }, src) {
     out.push(workflowFacts(src));
   } else {
     const doc = leadingDoc(src);
-    const { local, pkgs, exports } = codeFacts(src);
+    const { local, pkgs, exports } = codeFacts(src, lang);
     out.push(category === 'module' ? `A key ${lang} module${local.length ? '' : ''}.` : `${ROLE[category] || 'A file'} (${lang}, ${lines} lines)`.replace(/\.\s\(/, ' (') + (category === 'module' ? '' : '.'));
     if (doc) out.push(doc);
     if (exports.length) out.push(`It defines ${list(exports, 4)}.`);
