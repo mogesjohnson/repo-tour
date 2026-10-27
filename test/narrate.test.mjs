@@ -36,6 +36,12 @@ test('JavaScript: docstring, exports, packages and local imports', () => {
   assert.equal(c, 'A key JavaScript module. Parses config files. It defines `load`, `DEFAULTS` and `Loader`. Uses `fs` and `yaml` plus 1 local import.');
 });
 
+test('JavaScript default import names are not counted as packages', () => {
+  const c = say('src/app.js', 'module', "import React from 'react';\nimport ts from 'typescript';\nexport const App = 1;\n");
+  assert.match(c, /Uses `react` and `typescript`\./);
+  assert.doesNotMatch(c, /`React`|`ts`/);
+});
+
 test('entry points mention language and size', () => {
   const c = say('bin/cli.js', 'entry', "#!/usr/bin/env node\nimport { run } from '../src/run.js';\nrun();\n");
   assert.match(c, /^An entry point, where execution starts \(JavaScript, 4 lines\)\./);
